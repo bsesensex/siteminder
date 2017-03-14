@@ -1,14 +1,14 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:security="http://www.springframework.org/schema/security"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xmlns:aop="http://www.springframework.org/schema/aop"
-    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
-     
+<?xml version="1.0" encoding="utf-8"?>
+     <beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
      
@@ -17,19 +17,36 @@
 	 <security:http use-expressions="true" auto-config="true" entry-point-ref="http403EntryPoint">
     	<!-- Additional http configuration omitted -->
     	    	<security:intercept-url pattern="/index.jsp" access="permitAll" />
-    	    		<security:logout logout-url="/logout" />
+    	    		<security:logout  invalidate-session="true"   logout-url="/identity/logout"   success-handler-ref="logoutSuccessHandler" delete-cookies="JSESSIONID,
+														SMSESSION,
+														_ga,
+														RSOMyLogin,
+														RSOFP,
+														logintry,
+														RSOSESSION,
+														cookieBusFilterId,
+														mod_auth_openidc_session,
+														SITECK,
+														TARGET"  />
     	    		   	<security:intercept-url pattern="/secured/home" access="permitAll" />
+    	    		   	<security:intercept-url pattern="/users/manager" access="hasRole('ROLE_MANAGER')" />
+    	    		   	<security:intercept-url pattern="/users/member" access="hasRole('ROLE_USER')" />
+    	    		  <!--  	<security:intercept-url pattern="/identity/logout" access="permitAll" /> -->
+    	    		   	
     	<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
- 
+ <security:csrf disabled="true"/>
 
     
     	<security:custom-filter position="PRE_AUTH_FILTER" ref="siteminderFilter" />
   	</security:http>
+  	
 
     <bean id="siteminderFilter" class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
 	    <property name="principalRequestHeader" value="SM_USER"/>
 	    <property name="authenticationManager" ref="authenticationManager" />
-	    <!--  <property name="authenticationSuccessHandler" ref="myAuthenticationSuccessHandler" /> -->
+	    		<property name="checkForPrincipalChanges" value="true" />
+		<!-- <property name="authenticationSuccessHandler" ref="myAuthenticationSuccessHandler" /> -->
+	    <property name="authenticationSuccessHandler" ref="myAuthenticationSuccessHandler" /> 
 	</bean>
 	
   	<bean id="preauthAuthProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
@@ -39,6 +56,9 @@
 	      	</bean>
 	    </property>
     </bean> 
+    <bean id="logoutSuccessHandler" class="com.howtodoinjava.security.CustomLogoutHandler" >
+	    <constructor-arg value="https://ssologin.qagen2.corporate.ge.com/logoff/logoff.jsp?referrer=" />	
+	</bean>
     
     	<bean id="myAuthenticationSuccessHandler" class="com.howtodoinjava.security.MySimpleUrlAuthenticationSuccessHandler">
 

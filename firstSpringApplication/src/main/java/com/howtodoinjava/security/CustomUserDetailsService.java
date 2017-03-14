@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.util.CollectionUtils;
 
 import com.howtodoinjava.model.CustomUser;
 import com.howtodoinjava.model.Role;
@@ -23,11 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService
     {
 		System.out.println("username recieved :: " + username);
 		@SuppressWarnings("deprecation")
-		UserDetails user = new User(username, "password", true, true, true, true,
-				new GrantedAuthority[]{ new GrantedAuthorityImpl("ROLE_USER") });
+		
 		
 		CustomUser customUser = new CustomUser();
-		customUser.setFirstName("kb");
+		customUser.setFirstName(username);
 		customUser.setLastName("gc");
 		customUser.setUsername("kb");
 		customUser.setPassword("1234");
@@ -46,4 +46,28 @@ public class CustomUserDetailsService implements UserDetailsService
         return new User(username, "password", true, true, true, true,
         		authorities);
     }
+	
+	private List<GrantedAuthority> getGrantedAuthorities(List<String> roles) {
+		List<GrantedAuthority> authorities = null;
+		
+		if(CollectionUtils.isEmpty(roles)) {
+			return new ArrayList<GrantedAuthority>();
+		}
+		
+		authorities = new ArrayList<GrantedAuthority>(roles.size());
+		for (String role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role));
+		}
+		return authorities;
+	}
+	/**
+	 * Return instance of {@code ProfileAuthenticationToken} indicating successful authentication.
+	 * 
+	 * @param profile the {@code ProfileDTO} object
+	 * @param roles the list of user roles
+	 * @return the instance of {@code ProfileAuthenticationToken}
+	 */
+	private ProfileAuthenticationToken getAuthenticationSuccess(CustomUser profile, List<String> roles) {
+		return new ProfileAuthenticationToken(profile, getGrantedAuthorities(roles));
+	}
 }

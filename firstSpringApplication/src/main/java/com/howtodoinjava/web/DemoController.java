@@ -54,8 +54,12 @@ public class DemoController
 		return users;
 	}
 	
-	@RequestMapping(value="/secured/home2",method = RequestMethod.GET)
-	public @ResponseBody Users getAllUsers2() 
+
+	
+	
+
+	@RequestMapping(value="/manager",method = RequestMethod.GET,  headers="Accept=application/xml")
+	public @ResponseBody Users getForManager() 
 	{UserDetails userDetails =
 	 (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println(		userDetails.getAuthorities().size());
@@ -68,6 +72,30 @@ public class DemoController
 		User user2 = new User();
 		user2.setFirstName("tom");
 		user2.setLastName("hanks");
+		
+		Users users = new Users();
+		users.setUsers(new ArrayList<User>());
+		users.getUsers().add(user1);
+		users.getUsers().add(user2);
+		
+		return users;
+	}
+	
+	
+	@RequestMapping(value="/member",method = RequestMethod.GET)
+	public @ResponseBody Users getForMember() 
+	{UserDetails userDetails =
+	 (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(		userDetails.getAuthorities().size());
+		System.out.println(		userDetails.getAuthorities().size());
+		System.out.println(		userDetails.getUsername() +" "+ userDetails);
+		User user1 = new User();
+		user1.setFirstName("I am member");
+		user1.setLastName("Member");
+		
+		User user2 = new User();
+		user2.setFirstName("I am member");
+		user2.setLastName("Member");
 		
 		Users users = new Users();
 		users.setUsers(new ArrayList<User>());
