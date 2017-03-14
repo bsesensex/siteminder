@@ -1,7 +1,10 @@
 package com.howtodoinjava.web;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,9 @@ import com.howtodoinjava.model.Users;
 @RequestMapping("/users")
 public class DemoController 
 {
+	
+	@Autowired
+	MessageSource messageSource;
 	@RequestMapping(method = RequestMethod.GET, value="/{id}", headers="Accept=application/xml")
 	public @ResponseBody User getUserById(@PathVariable String id) 
 	{
@@ -41,6 +47,7 @@ public class DemoController
 		User user1 = new User();
 		user1.setFirstName("john");
 		user1.setLastName("adward");
+	System.out.println(messageSource.getMessage("logoff.url", new Object[]{}, Locale.getDefault()));
 		
 		User user2 = new User();
 		user2.setFirstName("tom");
