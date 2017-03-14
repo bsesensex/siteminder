@@ -12,7 +12,7 @@
      <!-- Annotation are configuring the application -->
      <mvc:annotation-driven/>
        <!-- Scan this package for all config annotations -->
-	<context:component-scan base-package="com.howtodoinjava.web" />
+	<context:component-scan base-package="com.siteminder.web" />
 	
        <!-- Ensures that any resource requests not handled by Spring MVC mappings will be delegated back to the Servlet container -->
     <mvc:default-servlet-handler />
@@ -56,7 +56,7 @@
       	<security:authentication-provider ref="preauthAuthProvider" />
     </security:authentication-manager>	
     
-    <bean id="customUserDetailsService" class="com.howtodoinjava.security.CustomUserDetailsService"></bean>
+    <bean id="customUserDetailsService" class="com.siteminder.security.CustomUserDetailsService"></bean>
     <bean id="http403EntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"></bean>
     
 </beans>

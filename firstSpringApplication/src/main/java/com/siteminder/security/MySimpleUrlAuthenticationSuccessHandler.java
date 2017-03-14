@@ -1,4 +1,4 @@
-package com.howtodoinjava.security;
+package com.siteminder.security;
 
 import java.io.IOException;
 import java.util.Collection;

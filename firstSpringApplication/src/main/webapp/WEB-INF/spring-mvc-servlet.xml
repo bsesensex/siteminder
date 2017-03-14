@@ -12,7 +12,7 @@
 	<!-- Annotation are configuring the application -->
 	<mvc:annotation-driven />
 	<!-- Scan this package for all config annotations -->
-	<context:component-scan base-package="com.howtodoinjava.web" />
+	<context:component-scan base-package="com.siteminder.web" />
 
 	<!-- Ensures that any resource requests not handled by Spring MVC mappings 
 		will be delegated back to the Servlet container -->

@@ -1,4 +1,4 @@
-package com.howtodoinjava.web;
+package com.siteminder.web;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.howtodoinjava.model.CustomUser;
-import com.howtodoinjava.model.User;
-import com.howtodoinjava.model.Users;
+import com.siteminder.model.CustomUser;
+import com.siteminder.model.User;
+import com.siteminder.model.Users;
 
 @Controller
 @RequestMapping("/users")

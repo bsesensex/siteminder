@@ -56,11 +56,11 @@
 	      	</bean>
 	    </property>
     </bean> 
-    <bean id="logoutSuccessHandler" class="com.howtodoinjava.security.CustomLogoutHandler" >
+    <bean id="logoutSuccessHandler" class="com.siteminder.security.CustomLogoutHandler" >
 	    <constructor-arg value="https://ssologin.qagen2.corporate.ge.com/logoff/logoff.jsp?referrer=" />	
 	</bean>
     
-    	<bean id="myAuthenticationSuccessHandler" class="com.howtodoinjava.security.MySimpleUrlAuthenticationSuccessHandler">
+    	<bean id="myAuthenticationSuccessHandler" class="com.siteminder.security.MySimpleUrlAuthenticationSuccessHandler">
 
     </bean>
     
@@ -70,7 +70,7 @@
       	<security:authentication-provider ref="preauthAuthProvider" />
     </security:authentication-manager>	
     
-    <bean id="customUserDetailsService" class="com.howtodoinjava.security.CustomUserDetailsService"></bean>
+    <bean id="customUserDetailsService" class="com.siteminder.security.CustomUserDetailsService"></bean>
     <bean id="http403EntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"></bean>
     
 </beans>

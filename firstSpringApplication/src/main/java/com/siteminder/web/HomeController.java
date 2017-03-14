@@ -1,4 +1,4 @@
-package com.howtodoinjava.web;
+package com.siteminder.web;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -6,7 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.howtodoinjava.model.CustomUser;
+import com.siteminder.model.CustomUser;
 
 
 

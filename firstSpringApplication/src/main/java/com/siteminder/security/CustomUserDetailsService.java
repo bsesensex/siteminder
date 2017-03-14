@@ -1,4 +1,4 @@
-package com.howtodoinjava.security;
+package com.siteminder.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.CollectionUtils;
 
-import com.howtodoinjava.model.CustomUser;
-import com.howtodoinjava.model.Role;
+import com.siteminder.model.CustomUser;
+import com.siteminder.model.Role;
 
 public class CustomUserDetailsService implements UserDetailsService
 {

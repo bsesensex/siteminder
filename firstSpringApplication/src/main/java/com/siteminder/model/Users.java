@@ -1,4 +1,4 @@
-package com.howtodoinjava.model;
+package com.siteminder.model;
 
 import java.util.Collection;
 
