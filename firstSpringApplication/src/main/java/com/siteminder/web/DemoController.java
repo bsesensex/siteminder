@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,13 +35,14 @@ public class DemoController
 	@RequestMapping(method = RequestMethod.GET, value="/{id}", headers="Accept=application/xml")
 	public @ResponseBody User getUserById(@PathVariable String id) 
 	{
-		cacheManager.getCache("default").put(1, "Hiren");	
-		cacheManager.getCache("default").put(SecurityContextHolder.getContext().getAuthentication().hashCode(),"vijay2");
+		 Cache mapOFCache= cacheManager.getCache("mySimpleCache");
+		 mapOFCache.put(1,"2");
 		System.out.println("Pring the cache");
-		System.out.println(cacheManager.getCache("default").get(SecurityContextHolder.getContext().getAuthentication().hashCode()));
+		mapOFCache.put(2,"3");
+		//System.out.println(cacheManager.getCache("mySimpleCache").get(SecurityContextHolder.getContext().getAuthentication().hashCode()+""));
+		System.out.println(cacheManager.getCache("mySimpleCache").getName());
+		System.out.println(cacheManager.getCache("mySimpleCache").get(-1));
 	
-		Map<String,String> hmap=(Map<String, String>) cacheManager.getCache("default");
-		System.out.println("eee "+hmap.get(1));
 		System.out.println("over of print the cache");
 		User user = new User();
 		UserDetails userDetails =
@@ -50,8 +53,8 @@ public class DemoController
 		cacheManager.getCache("default").put(SecurityContextHolder.getContext().getAuthentication().hashCode(),user);
 		System.out.println("200+ 4500");
 	
-		User userField=(User) cacheManager.getCache("default").get(SecurityContextHolder.getContext().getAuthentication().hashCode());
-		System.out.println(userField.getFirstName());
+		System.out.println("___"+cacheManager.getCache("default").get(SecurityContextHolder.getContext().getAuthentication().hashCode()).toString());;
+
 		return user;
 	}
 	
