@@ -1,9 +1,11 @@
-package com.siteminder.web;
+	package com.siteminder.web;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,15 +27,31 @@ public class DemoController
 	
 	@Autowired
 	MessageSource messageSource;
+	
+	@Autowired
+	CacheManager cacheManager;
 	@RequestMapping(method = RequestMethod.GET, value="/{id}", headers="Accept=application/xml")
 	public @ResponseBody User getUserById(@PathVariable String id) 
 	{
+		cacheManager.getCache("default").put(1, "Hiren");	
+		cacheManager.getCache("default").put(SecurityContextHolder.getContext().getAuthentication().hashCode(),"vijay2");
+		System.out.println("Pring the cache");
+		System.out.println(cacheManager.getCache("default").get(SecurityContextHolder.getContext().getAuthentication().hashCode()));
+	
+		Map<String,String> hmap=(Map<String, String>) cacheManager.getCache("default");
+		System.out.println("eee "+hmap.get(1));
+		System.out.println("over of print the cache");
 		User user = new User();
 		UserDetails userDetails =
 				 (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println(		userDetails.getAuthorities().size());
 		user.setFirstName("john");
 		user.setLastName("adward");
+		cacheManager.getCache("default").put(SecurityContextHolder.getContext().getAuthentication().hashCode(),user);
+		System.out.println("200+ 4500");
+	
+		User userField=(User) cacheManager.getCache("default").get(SecurityContextHolder.getContext().getAuthentication().hashCode());
+		System.out.println(userField.getFirstName());
 		return user;
 	}
 	

@@ -1,62 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:security="http://www.springframework.org/schema/security"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xmlns:aop="http://www.springframework.org/schema/aop"
-    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
-     
-     <!-- Annotation are configuring the application -->
-     <mvc:annotation-driven/>
-       <!-- Scan this package for all config annotations -->
-	<context:component-scan base-package="com.siteminder.web" />
-	
-       <!-- Ensures that any resource requests not handled by Spring MVC mappings will be delegated back to the Servlet container -->
-    <mvc:default-servlet-handler />
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	<!-- xmlns:cache="http://www.springframework.org/schema/cache" -->
+	xmlns:p="http://www.springframework.org/schema/p"	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+		<!-- http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd --> 
+		
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+<cache:annotation-driven />
+	<!-- Annotation are configuring the application -->
+	<mvc:annotation-driven />
+	<!-- Scan this package for all config annotations -->
+	<context:component-scan base-package="com.siteminder.web" />
+
+	<!-- Ensures that any resource requests not handled by Spring MVC mappings 
+		will be delegated back to the Servlet container -->
+	<mvc:default-servlet-handler />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
 	<mvc:resources mapping="/js/**" location="/assets/js/" />
 	<mvc:resources mapping="/css/**" location="/assets/css/" />
 	<mvc:resources mapping="/images/**" location="/assets/images/" />
 
-     
-	
-   
-	 <security:http use-expressions="true" auto-config="true" entry-point-ref="http403EntryPoint">
-    	<!-- Additional http configuration omitted -->
-    	    	<security:intercept-url pattern="/index.jsp" access="permitAll" />
-    	<security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-    	<security:intercept-url pattern="/secured/home" access="permitAll" />
 
-    	<security:logout logout-url="/logout" />
-    	<security:custom-filter position="PRE_AUTH_FILTER" ref="siteminderFilter" />
-  	</security:http>
 
-    <bean id="siteminderFilter" class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
-	    <property name="principalRequestHeader" value="SM_USER"/>
-	    <property name="authenticationManager" ref="authenticationManager" />
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
 	</bean>
 	
-  	<bean id="preauthAuthProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
-	    <property name="preAuthenticatedUserDetailsService">
-	      	<bean id="userDetailsServiceWrapper"  class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
-	        	<property name="userDetailsService" ref="customUserDetailsService"/>
-	      	</bean>
-	    </property>
-    </bean> 
+	<bean id="messageSource"
+      class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="classpath:message" />
+</bean>
 
- <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/jsp/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
-    <security:authentication-manager alias="authenticationManager">
-      	<security:authentication-provider ref="preauthAuthProvider" />
-    </security:authentication-manager>	
-    
-    <bean id="customUserDetailsService" class="com.siteminder.security.CustomUserDetailsService"></bean>
-    <bean id="http403EntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"></bean>
-    
+<!-- <bean id="infinishpcacheManager"
+          class="org.infinispan.spring.provider.SpringEmbeddedCacheManagerFactoryBean"
+          p:configurationFileLocation="classpath:infinispan-config.xml" / -->>
+
+
+
 </beans>
