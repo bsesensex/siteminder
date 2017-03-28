@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import com.siteminder.model.CustomUser;
+import com.siteminder.model.JsonUser;
+import com.siteminder.model.JsonUsers;
 import com.siteminder.model.User;
 import com.siteminder.model.Users;
 
@@ -58,17 +61,22 @@ public class DemoController
 		return user;
 	}
 	
-	@RequestMapping(method = RequestMethod.GET,  headers="Accept=application/xml")
+	@RequestMapping(method = RequestMethod.GET )
 	public @ResponseBody Users getAllUsers() 
-	{UserDetails userDetails =
-	 (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	{
+	    RestTemplate restTemplate = new RestTemplate();
+        String quote = restTemplate.getForObject("http://gturnquist-quoters.cfapps.io/api/random", String.class);
+        System.out.println(quote.toString());
+		
+		UserDetails userDetails =
+	      (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println(		userDetails.getAuthorities().size());
 		System.out.println(		userDetails.getAuthorities().size());
 		System.out.println(		userDetails.getUsername() +" "+ userDetails);
 		User user1 = new User();
 		user1.setFirstName("john");
 		user1.setLastName("adward");
-	System.out.println(messageSource.getMessage("logoff.url", new Object[]{}, Locale.getDefault()));
+	    System.out.println(messageSource.getMessage("logoff.url", new Object[]{}, Locale.getDefault()));
 		
 		User user2 = new User();
 		user2.setFirstName("tom");
@@ -82,6 +90,34 @@ public class DemoController
 		return users;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET,value="/{id}/{idd}", produces = "application/json")
+	public @ResponseBody JsonUsers getAllUsers2(@PathVariable String id,@PathVariable String idd) 
+	{
+	    RestTemplate restTemplate = new RestTemplate();
+        String quote = restTemplate.getForObject("http://gturnquist-quoters.cfapps.io/api/random", String.class);
+        System.out.println(quote.toString());
+		
+		UserDetails userDetails =
+	      (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(		userDetails.getAuthorities().size());
+		System.out.println(		userDetails.getAuthorities().size());
+		System.out.println(		userDetails.getUsername() +" "+ userDetails);
+		JsonUser user1 = new JsonUser();
+		user1.setFirstName("john");
+		user1.setLastName("adward");
+	    System.out.println(messageSource.getMessage("logoff.url", new Object[]{}, Locale.getDefault()));
+		
+	    JsonUser user2 = new JsonUser();
+		user2.setFirstName("tom");
+		user2.setLastName("hanks");
+		
+		JsonUsers users = new JsonUsers();
+		users.setUsers(new ArrayList<JsonUser>());
+		users.getUsers().add(user1);
+		users.getUsers().add(user2);
+		
+		return users;
+	}
 
 	
 	
