@@ -1,6 +1,7 @@
 	package com.siteminder.web;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -25,6 +26,9 @@ import com.siteminder.model.JsonUsers;
 import com.siteminder.model.User;
 import com.siteminder.model.Users;
 
+import net.codejava.spring.dao.UserDao;
+import net.codejava.spring.model.HibernateUser;
+
 @Controller
 @RequestMapping("/users")
 public class DemoController 
@@ -32,6 +36,8 @@ public class DemoController
 	
 	@Autowired
 	MessageSource messageSource;
+	 @Autowired
+	    private UserDao userDao;
 	
 	@Autowired
 	CacheManager cacheManager;
@@ -118,6 +124,25 @@ public class DemoController
 		
 		return users;
 	}
+	
+	
+
+	@RequestMapping(method = RequestMethod.GET,value="/hibernate/{idd}", produces = "application/json")
+	public @ResponseBody List<HibernateUser> getAllUsers3(@PathVariable String idd) 
+	{
+		 List<HibernateUser> listUsers = userDao.list();
+		
+		return listUsers;
+	}
+
+	@RequestMapping(method = RequestMethod.GET,value="/search/{idd}", produces = "application/json")
+	public @ResponseBody HibernateUser findByUserId(@PathVariable String idd) 
+	{
+		HibernateUser hibernateUser = userDao.findByUserId(idd);
+		
+		return hibernateUser;
+	}
+	
 
 	
 	
